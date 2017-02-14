@@ -65,13 +65,16 @@ def logout():
 import os
 @app.route("/filelisting", methods = ["GET", 'POST'])
 def file_list():
-    
-    my_files = []
-    rootdir = os.getcwd()
-    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
-        for file in files:
-            my_files = my_files + [file]
-    return render_template('file_lists.html', my_files = my_files)
+    if not session.get('logged_in'):
+        abort(401)
+        
+    else:
+        my_files = []
+        rootdir = os.getcwd()
+        for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'):
+            for file in files:
+                my_files = my_files + [file]
+        return render_template('file_lists.html', my_files = my_files)
 
 
 ###
